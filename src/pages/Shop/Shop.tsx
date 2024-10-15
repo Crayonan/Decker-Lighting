@@ -51,7 +51,7 @@ const packages = [
 ];
 
 // Replace with your actual WhatsApp Business number
-const whatsappNumber = "1234567890";
+const whatsappNumber = "4917695449722";
 
 export default function Shop() {
   const [openAccordion, setOpenAccordion] = useState<number | null>(null);
