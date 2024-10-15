@@ -44,7 +44,7 @@ const Photos: React.FC = () => {
   }, []);
 
   const fetchAssets = (tag: string | null = null) => {
-    let query: any = {
+    const query: any = {
       order: '-sys.createdAt'
     };
 

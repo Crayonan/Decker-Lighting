@@ -6,6 +6,7 @@ import { RiGalleryLine } from "react-icons/ri";
 import { FaUsers } from "react-icons/fa";
 import { FaRegEnvelope } from "react-icons/fa6";
 import { FaDollyFlatbed } from "react-icons/fa";
+import { IconType } from "react-icons/lib";
 
 interface DockItemProps {
   IconComponent: IconType;
@@ -49,11 +50,6 @@ const DockItem: React.FC<DockItemProps> = ({
   );
 };
 
-interface IconConfig {
-  icon: IconType;
-  path: string;
-  external?: boolean;
-}
 
 const Dock: React.FC = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number>(-1);

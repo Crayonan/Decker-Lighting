@@ -41,7 +41,7 @@ const Work: React.FC = () => {
       })
       .then((response) => {
         console.log('Fetched work items:', response.items);
-        setWorks(response.items as WorkEntry[]);
+        setWorks(response.items as unknown as WorkEntry[]);
         setIsLoading(false);
       })
       .catch((error) => {

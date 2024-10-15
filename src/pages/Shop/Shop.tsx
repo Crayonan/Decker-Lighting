@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FaChevronDown, FaBirthdayCake, FaRing, FaMusic, FaWhatsapp } from 'react-icons/fa';
 import { HiSparkles } from "react-icons/hi2";
 
