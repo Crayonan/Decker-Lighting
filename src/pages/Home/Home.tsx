@@ -21,8 +21,8 @@ const Home: React.FC = () => {
       </div>
 
       <div className="hero-header">
-        <h1>Light Works</h1>
-        <h1>By Niklas Decker</h1>
+        <h1 className="unselectable">Light Works</h1>
+        <h1 className="unselectable">By Niklas Decker</h1>
       </div>
 
       <div className="home-logo">

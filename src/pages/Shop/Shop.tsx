@@ -6,7 +6,8 @@ import {
   FaMusic,
   FaWhatsapp,
 } from "react-icons/fa";
-import { HiSparkles } from "react-icons/hi2";
+import { Check } from "lucide-react"
+import { HiSparkles } from "react-icons/hi";
 
 const packages = [
   {
@@ -122,7 +123,7 @@ export default function Shop() {
                         key={i}
                         className="flex items-center text-sm sm:text-base"
                       >
-                        <HiSparkles className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-[hsl(0,0%,40%)]" />
+                        <Check className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-[hsl(128,83%,60%)]" />
                         <span>{feature}</span>
                       </li>
                     ))}
