@@ -1,0 +1,108 @@
+import React, { useState } from 'react';
+import { FaChevronDown, FaBirthdayCake, FaRing, FaMusic, FaWhatsapp } from 'react-icons/fa';
+import { HiSparkles } from "react-icons/hi2";
+
+const packages = [
+  {
+    name: 'Small',
+    description: 'Perfect for birthdays and small gatherings',
+    price: '$299',
+    features: ['Up to 10 LED lights', 'Basic color options', '2-hour setup', 'Ideal for spaces up to 1000 sq ft'],
+    icon: FaBirthdayCake,
+  },
+  {
+    name: 'Medium',
+    description: 'Ideal for weddings and corporate events',
+    price: '$799',
+    features: ['Up to 30 LED lights', 'Advanced color mixing', '4-hour setup', 'Covers spaces up to 3000 sq ft', 'Includes 2 moving head lights'],
+    icon: FaRing,
+  },
+  {
+    name: 'Large',
+    description: 'Perfect for festivals and large-scale events',
+    price: '$1999',
+    features: ['Up to 100 LED lights', 'Professional DMX control', '8-hour setup', 'Suitable for outdoor venues', 'Includes 6 moving head lights', 'Fog machine included'],
+    icon: FaMusic,
+  },
+];
+
+// Replace with your actual WhatsApp Business number
+const whatsappNumber = '1234567890';
+
+export default function Shop() {
+  const [openAccordion, setOpenAccordion] = useState(null);
+
+  const toggleAccordion = (index) => {
+    setOpenAccordion(prevState => (prevState === index ? null : index));
+  };
+
+  const handleWhatsAppClick = (packageName) => {
+    const message = encodeURIComponent(`Hi, I'm interested in the ${packageName} Package for event lighting. Can you provide more information?`);
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  return (
+    <div className="min-h-screen bg-[hsl(0,0%,7.5%)] text-[hsl(0,0%,90%)]">
+      <div className="max-w-4xl p-4 pb-24 mx-auto sm:pb-4">
+        <h1 className="flex items-center justify-center mb-6 text-2xl font-bold text-center sm:text-3xl md:text-4xl">
+          <HiSparkles className="mr-2" />
+          Event Lighting Packages
+        </h1>
+        <div className="space-y-4">
+          {packages.map((pkg, index) => (
+            <div
+              key={pkg.name}
+              className="bg-[hsl(0,0%,10%)] border border-[hsl(0,0%,15%)] rounded-lg overflow-hidden"
+            >
+              <button
+                className="w-full p-4 sm:p-6 text-left flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-[hsl(0,0%,40%)] focus:ring-opacity-50"
+                onClick={() => toggleAccordion(index)}
+                aria-expanded={openAccordion === index}
+                aria-controls={`package-content-${index}`}
+              >
+                <div className="flex items-center space-x-3 sm:space-x-4">
+                  <pkg.icon className="w-6 h-6 sm:w-8 sm:h-8 text-[hsl(0,0%,60%)]" />
+                  <div>
+                    <h2 className="text-lg font-semibold sm:text-xl md:text-2xl">{pkg.name} Package</h2>
+                    <p className="text-sm sm:text-base text-[hsl(0,0%,60%)]">{pkg.description}</p>
+                  </div>
+                </div>
+                <FaChevronDown
+                  className={`w-5 h-5 sm:w-6 sm:h-6 text-[hsl(0,0%,60%)] transition-transform duration-300 ${
+                    openAccordion === index ? 'transform rotate-180' : ''
+                  }`}
+                />
+              </button>
+              <div
+                id={`package-content-${index}`}
+                className={`transition-all duration-300 ease-in-out ${
+                  openAccordion === index ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
+                }`}
+              >
+                <div className="p-4 pt-2 sm:p-6">
+                  <p className="mb-3 text-2xl font-bold sm:mb-4 sm:text-3xl">{pkg.price}</p>
+                  <ul className="space-y-2">
+                    {pkg.features.map((feature, i) => (
+                      <li key={i} className="flex items-center text-sm sm:text-base">
+                        <HiSparkles className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-[hsl(0,0%,40%)]" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <button
+                    onClick={() => handleWhatsAppClick(pkg.name)}
+                    className="mt-4 sm:mt-6 w-full bg-[#25D366] text-white py-2 sm:py-3 rounded-lg font-semibold text-sm sm:text-base hover:bg-[#128C7E] transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#128C7E] focus:ring-opacity-50 flex items-center justify-center"
+                  >
+                    <FaWhatsapp className="mr-2" />
+                    Inquire on WhatsApp
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
