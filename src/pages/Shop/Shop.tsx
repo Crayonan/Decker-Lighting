@@ -10,10 +10,14 @@ interface Package {
   description: string;
   price: string;
   features: string[];
+  whatsappLink: string;
 }
 
-// Replace with your actual WhatsApp Business number
-const whatsappNumber = "4917695449722";
+const whatsappLinks = [
+  "https://wa.me/p/8832657406755863/4917695449722",
+  "https://wa.me/p/7956263721141873/4917695449722",
+  "https://wa.me/p/7240885382703181/4917695449722",
+];
 
 export default function Shop() {
   const [packages, setPackages] = useState<Package[]>([]);
@@ -27,11 +31,12 @@ export default function Shop() {
         const response = await client.getEntries({
           content_type: 'package'
         });
-        const fetchedPackages = response.items.map((item: any) => ({
+        const fetchedPackages = response.items.map((item: any, index: number) => ({
           name: item.fields.name,
           description: item.fields.description,
           price: item.fields.price,
           features: item.fields.features,
+          whatsappLink: whatsappLinks[index] || whatsappLinks[0], // Fallback to first link if index out of bounds
         }));
         setPackages(fetchedPackages);
         setLoading(false);
@@ -49,12 +54,8 @@ export default function Shop() {
     setOpenAccordion((prevState) => (prevState === index ? null : index));
   };
 
-  const handleWhatsAppClick = (packageName: string) => {
-    const message = encodeURIComponent(
-      `Hi, I'm interested in the ${packageName} Package for event lighting. Can you provide more information?`
-    );
-    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}`;
-    window.open(whatsappUrl, "_blank");
+  const handleWhatsAppClick = (whatsappLink: string) => {
+    window.open(whatsappLink, "_blank");
   };
 
   if (loading) {
@@ -66,7 +67,7 @@ export default function Shop() {
   }
 
   return (
-    <div className="min-h-screen bg-[hsl(0,0%,7.5%)] text-[hsl(0,0%,90%)]">
+    <div className="min-h-screen pt-8 bg-[hsl(0,0%,7.5%)] text-[hsl(0,0%,90%)]">
       <div className="max-w-4xl p-4 pb-24 mx-auto sm:pb-4">
         <h1 className="flex items-center justify-center mb-6 text-2xl font-bold text-center sm:text-3xl md:text-4xl">
           <HiSparkles className="mr-2" />
@@ -88,7 +89,7 @@ export default function Shop() {
                   <PiPackageDuotone className="w-6 h-6 sm:w-8 sm:h-8 text-[hsl(0,0%,60%)]" />
                   <div>
                     <h2 className="text-lg font-semibold sm:text-xl md:text-2xl">
-                      {pkg.name}
+                      {pkg.name} Package
                     </h2>
                     <p className="text-sm sm:text-base text-[hsl(0,0%,60%)]">
                       {pkg.description}
@@ -125,7 +126,7 @@ export default function Shop() {
                     ))}
                   </ul>
                   <button
-                    onClick={() => handleWhatsAppClick(pkg.name)}
+                    onClick={() => handleWhatsAppClick(pkg.whatsappLink)}
                     className="mt-4 sm:mt-6 w-full bg-[#25D366] text-white py-2 sm:py-3 rounded-lg font-semibold text-sm sm:text-base hover:bg-[#128C7E] transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#128C7E] focus:ring-opacity-50 flex items-center justify-center"
                   >
                     <FaWhatsapp className="mr-2" />

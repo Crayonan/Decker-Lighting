@@ -53,7 +53,7 @@ export function TeamsPage() {
   }
 
   return (
-    <div className="min-h-screen py-12 pb-32 bg-dark-bg text-dark-text">
+    <div className="min-h-screen py-8 pb-32 bg-dark-bg text-dark-text">
       <div className="container mx-auto px-4 max-w-[1400px]">
         <div className="mb-12 text-center">
           <h2 className="mb-4 text-3xl font-bold">Meet Our Exceptional Team</h2>

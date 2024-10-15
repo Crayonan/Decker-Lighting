@@ -18,7 +18,7 @@ export default function ContactForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[hsl(0_0%_7.5%)]">
+    <div className="min-h-screen flex pt-8 pb-56 justify-center bg-[hsl(0_0%_7.5%)]">
       <div className="w-full max-w-md p-8 space-y-8 bg-[hsl(0_0%_10%)] rounded-xl shadow-lg border border-[hsl(0_0%_15%)]">
         <h2 className="text-3xl font-bold text-center text-[hsl(0_0%_90%)]">
           Contact Us
