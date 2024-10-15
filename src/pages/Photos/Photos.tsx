@@ -55,7 +55,7 @@ const Photos: React.FC = () => {
     client.getAssets(query)
       .then((response) => {
         const assetItems = response.items.map(asset => ({
-          url: asset.fields.file.url,
+          url: asset.fields.file?.url || '',
           tags: asset.metadata.tags.map(tag => tag.sys.id),
         }));
         setPhotos(assetItems);
