@@ -101,9 +101,9 @@ const Dock: React.FC = () => {
 
   const icons = [
     { icon: BiHomeAlt, path: "/" },
-    { icon: FaUsers, path: "/teams" },
-    { icon: FaDollyFlatbed, path: "/shop" },
     { icon: RiGalleryLine, path: "/photos" },
+    { icon: FaDollyFlatbed, path: "/shop" },
+    { icon: FaUsers, path: "/teams" },
     { icon: FaRegEnvelope, path: "/contact" },
   ];
 
