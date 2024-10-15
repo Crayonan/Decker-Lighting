@@ -14,7 +14,7 @@ const packages = [
     description: "Perfect for birthdays and small gatherings",
     price: "$299",
     features: [
-      "Up to 10 LED lights",
+      "Up to 20 LED lights",
       "Basic color options",
       "2-hour setup",
       "Ideal for spaces up to 1000 sq ft",
