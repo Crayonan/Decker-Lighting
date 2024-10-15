@@ -53,7 +53,7 @@ export function TeamsPage() {
         
         <h2 className="mb-8 text-2xl font-bold text-center">Our Light Engineering Team</h2>
         
-        <div className="grid grid-cols-1 gap-8 px-20 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-8 px-20 sm:px-0 md:grid-cols-2 lg:grid-cols-3">
           {employees.map((employee) => (
             <Card key={employee.email} className="bg-dark-card-bg border-dark-card-border">
               <CardHeader>
