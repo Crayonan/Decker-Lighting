@@ -1,47 +1,60 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
+import { client } from "../../contentfulClient";
 
 interface Employee {
-  name: string
-  role: string
-  bio: string
-  image: string
-  specialties: string[]
-  email: string
+  name: string;
+  role: string;
+  bio: string;
+  image: string;
+  specialties: string[];
+  email: string;
 }
 
-const employees: Employee[] = [
-  {
-    name: "Niklas Decker",
-    role: "Senior Light Engineer",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    image: "https://i.pravatar.cc/300?img=1",
-    specialties: ["LED Technology", "Smart Lighting", "Sustainable Design"],
-    email: "niklas.decker1@lightco.com"
-  },
-  {
-    name: "Niklas Decker",
-    role: "Architectural Lighting Designer",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-    image: "https://i.pravatar.cc/300?img=2",
-    specialties: ["Architectural Lighting", "3D Modeling", "Hospitality Design"],
-    email: "niklas.decker2@lightco.com"
-  },
-  {
-    name: "Niklas Decker",
-    role: "R&D Light Engineer",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.",
-    image: "https://i.pravatar.cc/300?img=3",
-    specialties: ["Quantum Dot LEDs", "Optics", "Product Development"],
-    email: "niklas.decker3@lightco.com"
-  }
-]
-
 export function TeamsPage() {
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchEmployees() {
+      try {
+        const response = await client.getEntries({
+          content_type: 'employee'
+        });
+        const fetchedEmployees = response.items.map((item: any) => ({
+          name: item.fields.name,
+          role: item.fields.role,
+          bio: item.fields.bio,
+          image: item.fields.image?.fields?.file?.url || "",
+          specialties: item.fields.specialties,
+          email: item.fields.email,
+        }));
+        setEmployees(fetchedEmployees);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching employees:', err);
+        setError('Failed to fetch employee data. Please try again later.');
+        setLoading(false);
+      }
+    }
+
+    fetchEmployees();
+  }, []);
+
+  if (loading) {
+    return <div className="flex items-center justify-center min-h-screen bg-dark-bg text-dark-text">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="flex items-center justify-center min-h-screen bg-dark-bg text-dark-text">{error}</div>;
+  }
+
   return (
-    <div className="min-h-screen py-12 pb-32 bg-dark-bg text-dark-text"> {/* Added pb-32 for bottom padding */}
-      <div className="container mx-auto px-4 max-w-[1400px]"> {/* Added max-w-[1400px] for centering */}
+    <div className="min-h-screen py-12 pb-32 bg-dark-bg text-dark-text">
+      <div className="container mx-auto px-4 max-w-[1400px]">
         <div className="mb-12 text-center">
           <h2 className="mb-4 text-3xl font-bold">Meet Our Exceptional Team</h2>
           <p className="max-w-2xl mx-auto text-dark-text-secondary">
