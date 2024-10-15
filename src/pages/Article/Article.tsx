@@ -10,6 +10,8 @@ interface ArticleFields {
   title: string;
   date: string;
   content: any; // You might want to define a more specific type for the rich text content
+  fields: any; // Add this line
+  contentTypeId: string; // Add this line
 }
 
 const renderOptions = {
@@ -23,7 +25,9 @@ const renderOptions = {
       );
     },
     [BLOCKS.QUOTE]: (node: Block) => {
-      return <blockquote>{(node.content[0] as any).content[0].value}</blockquote>;
+      return (
+        <blockquote>{(node.content[0] as any).content[0].value}</blockquote>
+      );
     },
     [INLINES.HYPERLINK]: (node: Inline) => {
       return (
@@ -42,14 +46,14 @@ const Article: React.FC = () => {
 
   useEffect(() => {
     client
-      .getEntries<ArticleFields>({
+      .getEntries({
         content_type: "article",
         "fields.slug": slug,
         limit: 1,
       })
       .then((response) => {
         if (response.items.length > 0) {
-          setArticle(response.items[0].fields);
+          setArticle(response.items[0] as unknown as ArticleFields);
         }
         setIsLoading(false);
       })

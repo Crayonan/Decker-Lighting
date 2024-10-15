@@ -20,6 +20,8 @@ interface WorkFields {
       slug: string;
     };
   };
+  fields: any; // Add this line
+  contentTypeId: string; // Add this line
 }
 
 interface WorkEntry {
@@ -35,12 +37,12 @@ const Work: React.FC = () => {
 
   useEffect(() => {
     client
-      .getEntries<WorkFields>({
+      .getEntries({
         content_type: "work",
         include: 2,
       })
       .then((response) => {
-        console.log('Fetched work items:', response.items);
+        console.log("Fetched work items:", response.items);
         setWorks(response.items as unknown as WorkEntry[]);
         setIsLoading(false);
       })
@@ -55,12 +57,19 @@ const Work: React.FC = () => {
   }
 
   const columnOne = works.slice(0, Math.ceil(works.length / 3));
-  const columnTwo = works.slice(Math.ceil(works.length / 3), Math.ceil(works.length * 2 / 3));
-  const columnThree = works.slice(Math.ceil(works.length * 2 / 3), works.length);
+  const columnTwo = works.slice(
+    Math.ceil(works.length / 3),
+    Math.ceil((works.length * 2) / 3)
+  );
+  const columnThree = works.slice(
+    Math.ceil((works.length * 2) / 3),
+    works.length
+  );
 
   const renderWorkItems = (workItems: WorkEntry[]) => {
     return workItems.map((work) => {
-      const { featuredImage, title, date, type, height, reference } = work.fields;
+      const { featuredImage, title, date, type, height, reference } =
+        work.fields;
       const slug = reference?.fields?.slug;
 
       console.log(`Item: ${title}, Type: ${type}, Slug: ${slug}`);

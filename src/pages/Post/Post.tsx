@@ -4,6 +4,7 @@ import { client } from "../../contentfulClient";
 import { FaLink } from "react-icons/fa";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { BLOCKS, INLINES, Block, Inline } from "@contentful/rich-text-types";
+import { Options } from '@contentful/rich-text-react-renderer';
 import "./post.css";
 
 interface PostFields {
@@ -12,7 +13,7 @@ interface PostFields {
   content: any; // You might want to define a more specific type for the rich text content
 }
 
-const renderOptions = {
+const renderOptions: Options = {
   renderNode: {
     [BLOCKS.EMBEDDED_ASSET]: (node: Block) => {
       const { file, title } = (node.data.target as any).fields;
