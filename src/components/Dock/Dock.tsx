@@ -27,8 +27,8 @@ const DockItem: React.FC<DockItemProps> = ({
   external,
   iconSize,
 }) => {
-  const scale = isHovered ? 2.5 : isNeighbor ? 2 : 1;
-  const margin = isHovered || isNeighbor ? "28px" : "4px";
+  const scale = isHovered ? 1.5 : isNeighbor ? 1.25 : 1;
+  const margin = isHovered || isNeighbor ? "20px" : "6px";
   const linkStyle = { transform: `scale(${scale})`, margin: `0 ${margin}` };
 
   return (
@@ -50,18 +50,17 @@ const DockItem: React.FC<DockItemProps> = ({
   );
 };
 
-
 const Dock: React.FC = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number>(-1);
   const [hoverEffectsEnabled, setHoverEffectsEnabled] = useState<boolean>(
     window.innerWidth >= 900
   );
-  const [iconSize, setIconSize] = useState<string>(window.innerWidth < 900 ? "25px" : "20px");
+  const [iconSize, setIconSize] = useState<string>(window.innerWidth < 900 ? "35px" : "30px");
 
   useEffect(() => {
     const checkScreenSize = () => {
       const isEnabled = window.innerWidth >= 900;
-      const newSize = window.innerWidth < 900 ? "25px" : "20px";
+      const newSize = window.innerWidth < 900 ? "35px" : "30px";
       setHoverEffectsEnabled(isEnabled);
       setIconSize(newSize);
     };
@@ -100,7 +99,6 @@ const Dock: React.FC = () => {
     { icon: RiGalleryLine, path: "/photos" },
     { icon: FaRegEnvelope, path: "/contact" },
   ];
-  
 
   return (
     <div className="dock-container" onMouseLeave={handleMouseLeave}>
