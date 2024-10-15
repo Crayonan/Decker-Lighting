@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "./dock.css";
 import { BiHomeAlt } from "react-icons/bi";
 import { RiGalleryLine } from "react-icons/ri";
@@ -13,6 +13,7 @@ interface DockItemProps {
   path: string;
   isHovered: boolean;
   isNeighbor: boolean;
+  isActive: boolean;
   onMouseEnter: () => void;
   external?: boolean;
   iconSize: string;
@@ -23,6 +24,7 @@ const DockItem: React.FC<DockItemProps> = ({
   path,
   isHovered,
   isNeighbor,
+  isActive,
   onMouseEnter,
   external,
   iconSize,
@@ -32,17 +34,21 @@ const DockItem: React.FC<DockItemProps> = ({
   const linkStyle = { transform: `scale(${scale})`, margin: `0 ${margin}` };
 
   return (
-    <div className="dock-item" style={linkStyle} onMouseEnter={onMouseEnter}>
+    <div 
+      className={`dock-item ${isActive ? 'active' : ''}`} 
+      style={linkStyle} 
+      onMouseEnter={onMouseEnter}
+    >
       {external ? (
         <a href={path} target="_blank" rel="noopener noreferrer">
           <div className="dock-item-link-wrap">
-            <IconComponent size={iconSize} style={{ color: "hsl(0, 0%, 50%)" }} />
+            <IconComponent size={iconSize} style={{ color: isActive ? "hsl(0, 0%, 100%)" : "hsl(0, 0%, 50%)" }} />
           </div>
         </a>
       ) : (
         <Link to={path}>
           <div className="dock-item-link-wrap">
-            <IconComponent size={iconSize} style={{ color: "hsl(0, 0%, 50%)" }} />
+            <IconComponent size={iconSize} style={{ color: isActive ? "hsl(0, 0%, 100%)" : "hsl(0, 0%, 50%)" }} />
           </div>
         </Link>
       )}
@@ -56,6 +62,7 @@ const Dock: React.FC = () => {
     window.innerWidth >= 900
   );
   const [iconSize, setIconSize] = useState<string>(window.innerWidth < 900 ? "35px" : "30px");
+  const location = useLocation();
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -110,6 +117,7 @@ const Dock: React.FC = () => {
             path={item.path}
             isHovered={index === hoveredIndex}
             isNeighbor={Math.abs(index - hoveredIndex) === 1}
+            isActive={location.pathname === item.path}
             onMouseEnter={() => handleMouseEnter(index)}
             iconSize={iconSize}
           />
