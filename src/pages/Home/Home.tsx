@@ -20,7 +20,7 @@ const Home: React.FC = () => {
         }}
       >
         <Suspense fallback={<div>Loading Spline scene...</div>}>
-          <LazySpline scene="https://prod.spline.design/vEYoLRgFtLhPP18Z/scene.splinecode" />
+          <LazySpline scene="https://prod.spline.design/BNaurVSeS57NeyWI/scene.splinecode" />
         </Suspense>
       </div>
 
