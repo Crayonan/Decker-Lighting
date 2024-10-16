@@ -3,6 +3,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { client } from "../../contentfulClient";
 import "./photos.css";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Photo {
   url: string;
@@ -13,24 +14,27 @@ const Photos: React.FC = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [tags, setTags] = useState<string[]>(["All"]);
   const [selectedTag, setSelectedTag] = useState<string>("All");
+  const [loading, setLoading] = useState(true);
 
   const container = useRef<HTMLDivElement>(null);
   const tagsRef = useRef<(HTMLButtonElement | null)[]>([]);
 
   useGSAP(() => {
-    gsap.from(".photos-col img", { y: 300, stagger: 0.025, opacity: 0 });
+    if (!loading) {
+      gsap.from(".photos-col img", { y: 300, stagger: 0.025, opacity: 0 });
 
-    tagsRef.current.forEach((tag) => {
-      if (tag) {
-        gsap.to(tag, {
-          scale: 1.05,
-          duration: 0.3,
-          paused: true,
-          ease: "power1.out"
-        });
-      }
-    });
-  }, { scope: container });
+      tagsRef.current.forEach((tag) => {
+        if (tag) {
+          gsap.to(tag, {
+            scale: 1.05,
+            duration: 0.3,
+            paused: true,
+            ease: "power1.out"
+          });
+        }
+      });
+    }
+  }, { scope: container, dependencies: [loading] });
 
   useEffect(() => {
     client.getTags()
@@ -40,15 +44,16 @@ const Photos: React.FC = () => {
       })
       .catch(console.error);
 
-      fetchAssets();
-    }, []);
-  
-    const fetchAssets = (tag: string | null = null) => {
-      const query: Record<string, unknown> = {
-        order: '-sys.createdAt'
-      };
-  
-      if (tag && tag !== "All") {
+    fetchAssets();
+  }, []);
+
+  const fetchAssets = (tag: string | null = null) => {
+    setLoading(true);
+    const query: Record<string, unknown> = {
+      order: '-sys.createdAt'
+    };
+
+    if (tag && tag !== "All") {
       query['metadata.tags.sys.id[in]'] = tag;
     }
 
@@ -59,6 +64,7 @@ const Photos: React.FC = () => {
           tags: asset.metadata.tags.map(tag => tag.sys.id),
         }));
         setPhotos(assetItems);
+        setLoading(false);
       })
       .catch(console.error);
   };
@@ -93,6 +99,26 @@ const Photos: React.FC = () => {
     else if (index % 3 === 1) columnTwo.push(photo);
     else columnThree.push(photo);
   });
+
+  if (loading) {
+    return (
+      <div className="container p-4 mx-auto space-y-4">
+        <nav className="flex justify-center mb-6 space-x-2">
+          {["All", "Weddings", "Venues", "Festivals"].map((item) => (
+            <Skeleton key={item} className="w-24 h-10 rounded-full" />
+          ))}
+        </nav>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <Skeleton className="aspect-[3/4] w-full rounded-lg" />
+          <Skeleton className="aspect-[3/4] w-full rounded-lg" />
+          <div className="space-y-4">
+            <Skeleton className="w-full rounded-lg aspect-square" />
+            <Skeleton className="w-full rounded-lg aspect-square" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container page-photos" ref={container}>
