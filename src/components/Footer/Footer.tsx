@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <>
       {/* Mobile footer */}
-      <footer className="fixed bottom-0 left-0 right-0 z-10 flex items-center justify-center p-4 space-x-4 bg-dark-bg text-dark-text-secondary md:hidden">
+      <footer className="fixed bottom-0 left-0 right-0 z-10 flex items-center justify-center p-4 space-x-4 bg-transparent text-dark-text-secondary md:hidden">
         <Link to="/impressum" className="text-sm transition-colors hover:text-dark-text">
           Impressum
         </Link>
@@ -18,7 +18,7 @@ const Footer = () => {
       </footer>
 
       {/* Desktop footer */}
-      <footer className="fixed z-10 flex-col items-end hidden p-4 space-y-2 bottom-4 right-4 bg-dark-bg text-dark-text-secondary md:flex">
+      <footer className="fixed z-10 flex-col items-end hidden p-4 space-y-2 bg-transparent bottom-4 right-4 text-dark-text-secondary md:flex">
         <Link to="/impressum" className="text-sm transition-colors hover:text-dark-text">
           Impressum
         </Link>
