@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -26,6 +25,7 @@ const Footer = () => {
           Cookies
         </Link>
         <Link to="/privacy" className="text-sm transition-colors hover:text-dark-text">
+          
           Privacy
         </Link>
       </footer>
