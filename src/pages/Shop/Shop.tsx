@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { FaChevronDown, FaWhatsapp } from "react-icons/fa";
 import { PiPackageDuotone } from "react-icons/pi";
-import { Check } from "lucide-react"
+import { Check } from "lucide-react";
 import { HiSparkles } from "react-icons/hi";
 import { client } from "../../contentfulClient";
 
@@ -29,20 +29,22 @@ export default function Shop() {
     async function fetchPackages() {
       try {
         const response = await client.getEntries({
-          content_type: 'package'
+          content_type: "package",
         });
-        const fetchedPackages = response.items.map((item: any, index: number) => ({
-          name: item.fields.name,
-          description: item.fields.description,
-          price: item.fields.price,
-          features: item.fields.features,
-          whatsappLink: whatsappLinks[index] || whatsappLinks[0], // Fallback to first link if index out of bounds
-        }));
+        const fetchedPackages = response.items.map(
+          (item: any, index: number) => ({
+            name: item.fields.name,
+            description: item.fields.description,
+            price: item.fields.price,
+            features: item.fields.features,
+            whatsappLink: whatsappLinks[index] || whatsappLinks[0], // Fallback to first link if index out of bounds
+          })
+        );
         setPackages(fetchedPackages);
         setLoading(false);
       } catch (err) {
-        console.error('Error fetching packages:', err);
-        setError('Failed to fetch packages. Please try again later.');
+        console.error("Error fetching packages:", err);
+        setError("Failed to fetch packages. Please try again later.");
         setLoading(false);
       }
     }
@@ -59,20 +61,36 @@ export default function Shop() {
   };
 
   if (loading) {
-    return <div className="min-h-screen bg-[hsl(0,0%,7.5%)] text-[hsl(0,0%,90%)] flex items-center justify-center">Loading...</div>;
+    return (
+      <div className="min-h-screen bg-[hsl(0,0%,7.5%)] text-[hsl(0,0%,90%)] flex items-center justify-center">
+        Loading...
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="min-h-screen bg-[hsl(0,0%,7.5%)] text-[hsl(0,0%,90%)] flex items-center justify-center">{error}</div>;
+    return (
+      <div className="min-h-screen bg-[hsl(0,0%,7.5%)] text-[hsl(0,0%,90%)] flex items-center justify-center">
+        {error}
+      </div>
+    );
   }
 
   return (
     <div className="min-h-screen pt-8 bg-[hsl(0,0%,7.5%)] text-[hsl(0,0%,90%)]">
       <div className="max-w-4xl p-4 pb-24 mx-auto sm:pb-4">
-        <h1 className="flex items-center justify-center mb-6 text-2xl font-bold text-center sm:text-3xl md:text-4xl">
-          <HiSparkles className="mr-2" />
-          Event Lighting Packages
-        </h1>
+        <div className="mb-12 text-center">
+          <h2 className="mb-4 text-3xl font-bold">Our packages</h2>
+          <p className="max-w-2xl mx-auto text-dark-text-secondary">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat. Duis aute irure dolor in
+            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+            culpa qui officia deserunt mollit anim id est laborum.
+          </p>
+        </div>
         <div className="space-y-4">
           {packages.map((pkg, index) => (
             <div

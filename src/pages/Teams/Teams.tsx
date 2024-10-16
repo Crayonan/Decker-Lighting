@@ -66,9 +66,13 @@ export function TeamsPage() {
         
         <h2 className="mb-8 text-2xl font-bold text-center">Our Light Engineering Team</h2>
         
-        <div className="grid grid-cols-1 gap-8 px-4 sm:px-6 md:px-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className={`grid gap-8 px-4 sm:px-6 md:px-8 ${
+          employees.length < 3 
+            ? 'grid-cols-[repeat(auto-fit,minmax(0,360px))] justify-center'
+            : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+        }`}>
           {employees.map((employee) => (
-            <Card key={employee.email} className="bg-dark-card-bg border-dark-card-border">
+            <Card key={employee.email} className="w-full bg-dark-card-bg border-dark-card-border">
               <CardHeader>
                 <Avatar className="w-24 h-24 mx-auto mb-4">
                   <AvatarImage src={employee.image} alt={employee.name} />

@@ -6,10 +6,10 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: #000000; /* Ensure the background isn't transparent */
+  background-color: #00000000; /* Ensure the background isn't transparent */
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Optional: adds a subtle shadow for depth */
+  /* box-shadow: 0 2px 4px rgba(0,0,0,0.1); Optional: adds a subtle shadow for depth */
 }
 
 .tags-bar {
