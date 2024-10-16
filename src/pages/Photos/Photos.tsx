@@ -40,15 +40,15 @@ const Photos: React.FC = () => {
       })
       .catch(console.error);
 
-    fetchAssets();
-  }, []);
-
-  const fetchAssets = (tag: string | null = null) => {
-    const query: any = {
-      order: '-sys.createdAt'
-    };
-
-    if (tag && tag !== "All") {
+      fetchAssets();
+    }, []);
+  
+    const fetchAssets = (tag: string | null = null) => {
+      const query: Record<string, unknown> = {
+        order: '-sys.createdAt'
+      };
+  
+      if (tag && tag !== "All") {
       query['metadata.tags.sys.id[in]'] = tag;
     }
 

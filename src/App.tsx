@@ -3,7 +3,6 @@ import "./App.css";
 
 import { Routes, Route, useLocation } from "react-router-dom";
 import Dock from "./components/Dock/Dock";
-import SwipeRouterWrapper from "./components/SwipeRouterWrapper/SwipeRouterWrapper";
 import Home from "./pages/Home/Home";
 import Photos from "./pages/Photos/Photos";
 import { TeamsPage } from "./pages/Teams/Teams";

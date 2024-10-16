@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <>
       {/* Mobile footer */}
-      <footer className="fixed bottom-0 left-0 right-0 z-10 flex items-center justify-center p-4 space-x-4 bg-transparent text-dark-text-secondary md:hidden">
+      <footer className="fixed bottom-0 left-0 right-0 z-10 flex items-center justify-center p-3 space-x-4 bg-transparent text-dark-text-secondary md:hidden">
         <Link to="/impressum" className="text-sm transition-colors hover:text-dark-text">
           Impressum
         </Link>
