@@ -1,18 +1,79 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import {
-  FaWhatsapp,
-  FaInstagram,
-} from "react-icons/fa";
-import { MdEmail } from 'react-icons/md';
+import { FaWhatsapp, FaInstagram } from "react-icons/fa";
+import { MdEmail } from "react-icons/md";
 
 export default function ContactForm() {
+  const [status, setStatus] = useState({
+    submitted: false,
+    submitting: false,
+    info: { error: false, msg: null as string | null },
+  });
+  const [inputs, setInputs] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  const handleServerResponse = (ok: boolean, msg: string) => {
+    if (ok) {
+      setStatus({
+        submitted: true,
+        submitting: false,
+        info: { error: false, msg },
+      });
+      setInputs({
+        name: "",
+        email: "",
+        message: "",
+      });
+    } else {
+      setStatus((prevStatus) => ({
+        ...prevStatus,
+        info: { error: true, msg },
+      }));
+    }
+  };
+
+  const handleOnChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { id, value } = e.target;
+    setInputs((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+    setStatus({
+      submitted: false,
+      submitting: false,
+      info: { error: false, msg: null },
+    });
+  };
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("Form submitted");
+    setStatus((prevStatus) => ({ ...prevStatus, submitting: true }));
+    axios({
+      method: "POST",
+      url: "https://formspree.io/f/mgvevwav",
+      data: inputs,
+    })
+      .then(() => {
+        handleServerResponse(
+          true,
+          "Thank you, your message has been submitted."
+        );
+      })
+      .catch((error) => {
+        handleServerResponse(
+          false,
+          error.response?.data?.error || "Error submitting form"
+        );
+      });
   };
 
   return (
@@ -24,44 +85,64 @@ export default function ContactForm() {
         <div className="w-full bg-[hsl(0_0%_10%)] rounded-xl shadow-lg border border-[hsl(0_0%_15%)] p-4 sm:p-6 flex-grow flex flex-col">
           <form onSubmit={handleSubmit} className="flex-grow space-y-4">
             <div>
-              <Label htmlFor="name" className="text-sm">Name</Label>
+              <Label htmlFor="name" className="text-sm">
+                Name
+              </Label>
               <Input
                 id="name"
                 placeholder="Your name"
                 required
+                onChange={handleOnChange}
+                value={inputs.name}
                 className="bg-[hsl(0_0%_12.5%)] border-[hsl(0_0%_15%)] mt-1"
               />
             </div>
             <div>
-              <Label htmlFor="email" className="text-sm">Email</Label>
+              <Label htmlFor="email" className="text-sm">
+                Email
+              </Label>
               <Input
                 id="email"
                 type="email"
                 placeholder="Your email"
                 required
+                onChange={handleOnChange}
+                value={inputs.email}
                 className="bg-[hsl(0_0%_12.5%)] border-[hsl(0_0%_15%)] mt-1"
               />
             </div>
             <div>
-              <Label htmlFor="message" className="text-sm">Message</Label>
+              <Label htmlFor="message" className="text-sm">
+                Message
+              </Label>
               <Textarea
                 id="message"
                 placeholder="Your message"
                 required
+                onChange={handleOnChange}
+                value={inputs.message}
                 className="bg-[hsl(0_0%_12.5%)] border-[hsl(0_0%_15%)] mt-1 h-full min-h-[100px]"
               />
             </div>
             <Button
               type="submit"
+              disabled={status.submitting}
               className="w-full bg-[hsl(0_0%_12.5%)] hover:bg-[hsl(0_0%_15%)] py-2"
             >
-              Send Message
+              {!status.submitting
+                ? !status.submitted
+                  ? "Send Message"
+                  : "Message Sent"
+                : "Sending..."}
             </Button>
           </form>
-          <div className="mt-4 py-4border-t border-[hsl(0_0%_15%)]">
-            {/* <p className="text-[hsl(0_0%_60%)] text-center text-sm mb-2">
-              Connect with us
-            </p> */}
+          {status.info.error && (
+            <div className="mt-4 text-red-500 error">{status.info.msg}</div>
+          )}
+          {!status.info.error && status.info.msg && (
+            <p className="mt-4 text-green-500">{status.info.msg}</p>
+          )}
+          <div className="mt-4 py-4 border-t border-[hsl(0_0%_15%)]">
             <div className="flex justify-center space-x-4">
               <a
                 href="https://www.instagram.com/decker.veranstaltungstechnik/"

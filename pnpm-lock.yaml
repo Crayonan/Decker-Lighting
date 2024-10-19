@@ -35,6 +35,9 @@ dependencies:
   '@types/three':
     specifier: ^0.169.0
     version: 0.169.0
+  axios:
+    specifier: ^1.7.7
+    version: 1.7.7
   class-variance-authority:
     specifier: ^0.7.0
     version: 0.7.0
