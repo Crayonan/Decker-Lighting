@@ -38,10 +38,13 @@ export default function Shop() {
         // Fetch intro text
         const textResponse = await client.getEntries({
           content_type: "websiteText",
-          'fields.shopText[exists]': true,
+          "fields.shopText[exists]": true,
           limit: 1,
         });
-        if (textResponse.items.length > 0 && typeof textResponse.items[0].fields.shopText === 'string') {
+        if (
+          textResponse.items.length > 0 &&
+          typeof textResponse.items[0].fields.shopText === "string"
+        ) {
           setshopText(textResponse.items[0].fields.shopText);
         }
 
@@ -81,10 +84,12 @@ export default function Shop() {
   }
 
   return (
-    <div className="min-h-screen pt-8 bg-[hsl(0,0%,7.5%)] text-[hsl(0,0%,90%)]">
-      <div className="max-w-4xl p-4 pb-24 mx-auto sm:pb-4">
+    <div className="min-h-screen py-8 pb-32 bg-dark-bg text-dark-text">
+      <div className="max-w-4xl px-4 pb-24 mx-auto sm:pb-4">
         <div className="mb-12 text-center">
-          <h1 className="mb-4 text-3xl font-bold">Our packages</h1>
+          <h1 className="py-8 mx-auto text-3xl font-bold text-center sm:px-4">
+            Our packages
+          </h1>
           <p className="max-w-2xl mx-auto text-dark-text-secondary">
             {shopText}
           </p>

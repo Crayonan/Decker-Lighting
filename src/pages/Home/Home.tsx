@@ -29,11 +29,11 @@ const Home: React.FC = () => {
         <h1 className="unselectable">Niklas Decker</h1>
       </div>
 
-      <div className="home-logo">
+      {/* <div className="home-logo">
         <FaLightbulb size="16px" style={{ color: "#fff" }} />
-      </div>
+      </div> */}
 
-      <div className="live-clock">
+      <div className="live-clock unselectable">
         <LiveClockUpdate />
       </div>
     </>

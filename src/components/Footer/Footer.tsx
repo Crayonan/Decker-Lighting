@@ -11,7 +11,7 @@ const Footer = () => {
         {/* <Link to="/cookies" className="text-sm transition-colors hover:text-dark-text">
           Cookies
         </Link> */}
-        <Link to="/privacy" className="text-sm transition-colors hover:text-dark-text">
+        <Link to="/legal/privacy" className="text-sm transition-colors hover:text-dark-text">
           Privacy
         </Link>
       </footer>

@@ -50,7 +50,8 @@ const Photos: React.FC = () => {
   const fetchAssets = (tag: string | null = null) => {
     setLoading(true);
     const query: Record<string, unknown> = {
-      order: '-sys.createdAt'
+      order: '-sys.createdAt',
+      'metadata.tags[exists]': true // This ensures we only fetch assets with tags
     };
 
     if (tag && tag !== "All") {
@@ -59,10 +60,12 @@ const Photos: React.FC = () => {
 
     client.getAssets(query)
       .then((response) => {
-        const assetItems = response.items.map(asset => ({
-          url: asset.fields.file?.url || '',
-          tags: asset.metadata.tags.map(tag => tag.sys.id),
-        }));
+        const assetItems = response.items
+          .filter(asset => asset.metadata.tags.length > 0) // Extra check to ensure only tagged assets are included
+          .map(asset => ({
+            url: asset.fields.file?.url || '',
+            tags: asset.metadata.tags.map(tag => tag.sys.id),
+          }));
         setPhotos(assetItems);
         setLoading(false);
       })
