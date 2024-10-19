@@ -98,7 +98,7 @@ export default function Shop() {
           {packages.map((pkg, index) => (
             <div
               key={pkg.name}
-              className="bg-[hsl(0,0%,10%)] border border-[hsl(0,0%,15%)] rounded-lg overflow-hidden"
+              className="bg-[hsl(0,0%,10%)] border border-[hsl(0,0%,15%)] shadow-md rounded-xl overflow-hidden"
             >
               <button
                 className="w-full p-4 sm:p-6 text-left flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-[hsl(0,0%,40%)] focus:ring-opacity-50"

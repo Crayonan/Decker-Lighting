@@ -108,7 +108,7 @@ export function TeamsPage() {
           {employees.map((employee) => (
             <Card
               key={employee.email}
-              className="w-full bg-dark-card-bg border-dark-card-border"
+              className="w-full shadow-md rounded-xl bg-dark-card-bg border-dark-card-border"
             >
               <CardHeader>
                 <Avatar className="w-24 h-24 mx-auto mb-4">
