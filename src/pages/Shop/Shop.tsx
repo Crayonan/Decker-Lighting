@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { FaChevronDown, FaWhatsapp } from "react-icons/fa";
 import { PiPackageDuotone } from "react-icons/pi";
 import { Check } from "lucide-react";
-import { HiSparkles } from "react-icons/hi";
 import { client } from "../../contentfulClient";
 
 interface Package {
@@ -13,43 +12,48 @@ interface Package {
   whatsappLink: string;
 }
 
-const whatsappLinks = [
-  "https://wa.me/p/8832657406755863/4917695449722",
-  "https://wa.me/p/7956263721141873/4917695449722",
-  "https://wa.me/p/7240885382703181/4917695449722",
-];
-
 export default function Shop() {
   const [packages, setPackages] = useState<Package[]>([]);
+  const [shopText, setshopText] = useState<string>("");
   const [openAccordion, setOpenAccordion] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchPackages() {
+    async function fetchData() {
       try {
-        const response = await client.getEntries({
+        // Fetch packages
+        const packagesResponse = await client.getEntries({
           content_type: "package",
         });
-        const fetchedPackages = response.items.map(
-          (item: any, index: number) => ({
-            name: item.fields.name,
-            description: item.fields.description,
-            price: item.fields.price,
-            features: item.fields.features,
-            whatsappLink: whatsappLinks[index] || whatsappLinks[0], // Fallback to first link if index out of bounds
-          })
-        );
+        const fetchedPackages = packagesResponse.items.map((item: any) => ({
+          name: item.fields.name,
+          description: item.fields.description,
+          price: item.fields.price,
+          features: item.fields.features,
+          whatsappLink: item.fields.whatsappLink,
+        }));
         setPackages(fetchedPackages);
+
+        // Fetch intro text
+        const textResponse = await client.getEntries({
+          content_type: "websiteText",
+          'fields.shopText[exists]': true,
+          limit: 1,
+        });
+        if (textResponse.items.length > 0 && typeof textResponse.items[0].fields.shopText === 'string') {
+          setshopText(textResponse.items[0].fields.shopText);
+        }
+
         setLoading(false);
       } catch (err) {
-        console.error("Error fetching packages:", err);
-        setError("Failed to fetch packages. Please try again later.");
+        console.error("Error fetching data:", err);
+        setError("Failed to fetch data. Please try again later.");
         setLoading(false);
       }
     }
 
-    fetchPackages();
+    fetchData();
   }, []);
 
   const toggleAccordion = (index: number) => {
@@ -80,15 +84,9 @@ export default function Shop() {
     <div className="min-h-screen pt-8 bg-[hsl(0,0%,7.5%)] text-[hsl(0,0%,90%)]">
       <div className="max-w-4xl p-4 pb-24 mx-auto sm:pb-4">
         <div className="mb-12 text-center">
-          <h2 className="mb-4 text-3xl font-bold">Our packages</h2>
+          <h1 className="mb-4 text-3xl font-bold">Our packages</h1>
           <p className="max-w-2xl mx-auto text-dark-text-secondary">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
+            {shopText}
           </p>
         </div>
         <div className="space-y-4">
@@ -107,7 +105,7 @@ export default function Shop() {
                   <PiPackageDuotone className="w-6 h-6 sm:w-8 sm:h-8 text-[hsl(0,0%,60%)]" />
                   <div>
                     <h2 className="text-lg font-semibold sm:text-xl md:text-2xl">
-                      {pkg.name} Package
+                      {pkg.name}
                     </h2>
                     <p className="text-sm sm:text-base text-[hsl(0,0%,60%)]">
                       {pkg.description}

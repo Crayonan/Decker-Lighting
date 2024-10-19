@@ -15,16 +15,18 @@ interface Employee {
 
 export function TeamsPage() {
   const [employees, setEmployees] = useState<Employee[]>([]);
+  const [teamText, setTeamText] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchEmployees() {
+    async function fetchData() {
       try {
-        const response = await client.getEntries({
+        // Fetch employees
+        const employeesResponse = await client.getEntries({
           content_type: 'employee'
         });
-        const fetchedEmployees = response.items.map((item: any) => ({
+        const fetchedEmployees = employeesResponse.items.map((item: any) => ({
           name: item.fields.name,
           role: item.fields.role,
           bio: item.fields.bio,
@@ -33,15 +35,26 @@ export function TeamsPage() {
           email: item.fields.email,
         }));
         setEmployees(fetchedEmployees);
+
+        // Fetch team text
+        const textResponse = await client.getEntries({
+          content_type: 'websiteText',
+          'fields.teamText[exists]': true,
+          limit: 1,
+        });
+        if (textResponse.items.length > 0 && typeof textResponse.items[0].fields.teamText === 'string') {
+          setTeamText(textResponse.items[0].fields.teamText);
+        }
+
         setLoading(false);
       } catch (err) {
-        console.error('Error fetching employees:', err);
-        setError('Failed to fetch employee data. Please try again later.');
+        console.error('Error fetching data:', err);
+        setError('Failed to fetch data. Please try again later.');
         setLoading(false);
       }
     }
 
-    fetchEmployees();
+    fetchData();
   }, []);
 
   if (loading) {
@@ -58,9 +71,7 @@ export function TeamsPage() {
         <div className="mb-12 text-center">
           <h2 className="mb-4 text-3xl font-bold">Meet Our Exceptional Team</h2>
           <p className="max-w-2xl mx-auto text-dark-text-secondary">
-            At our company, we pride ourselves on the expertise and dedication of our light engineering team. 
-            Each member brings a unique set of skills and experiences that contribute to our innovative solutions 
-            in the field of lighting technology. Get to know the brilliant minds behind our cutting-edge designs.
+            {teamText}
           </p>
         </div>
         

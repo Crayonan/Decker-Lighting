@@ -9,6 +9,8 @@ import { TeamsPage } from "./pages/Teams/Teams";
 import ContactForm from "./pages/Contact/Contact";
 import Shop from "./pages/Shop/Shop";
 import Footer from "./components/Footer/Footer";
+import { ImpressumPage } from "./pages/Legal/Impressum";
+import { PrivacyPolicyPage } from "./pages/Legal/Privacy";
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -23,6 +25,8 @@ const App: React.FC = () => {
         <Route path="/photos" element={<Photos />} />
         <Route path="/teams" element={<TeamsPage />} />
         <Route path="/contact" element={<ContactForm />} />
+        <Route path='/legal/impressum' element={<ImpressumPage />} />
+        <Route path='/legal/privacy' element={<PrivacyPolicyPage />} />
       </Routes>
       <Footer />
       {/* </SwipeRouterWrapper> */}
