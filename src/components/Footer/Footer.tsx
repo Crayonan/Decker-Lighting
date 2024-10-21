@@ -18,13 +18,13 @@ const Footer = () => {
 
       {/* Desktop footer */}
       <footer className="fixed z-10 flex-col items-end hidden p-4 space-y-2 bg-transparent bottom-4 right-4 text-dark-text-secondary md:flex">
-        <Link to="/legal/impressum" className="text-sm transition-colors hover:text-dark-text">
+        <Link to="/legal/impressum" className="text-sm transition-colors unselectable hover:text-dark-text">
           Impressum
         </Link>
         {/* <Link to="/cookies" className="text-sm transition-colors hover:text-dark-text">
           Cookies
         </Link> */}
-        <Link to="/legal/privacy" className="text-sm transition-colors hover:text-dark-text">
+        <Link to="/legal/privacy" className="text-sm transition-colors unselectable hover:text-dark-text">
           
           Privacy
         </Link>
