@@ -13,7 +13,7 @@ export function ImpressumPage() {
             <p>Auf der Platte 8</p>
             <p>88284 Wolpertswende</p>
             <p>Telefon: 017695449722</p>
-            <p>E-Mail: niki25.9@web.de</p>
+            <p>E-Mail: info@decker-eventtechnik.com</p>
           </Section>
 
           <Section title="Angaben zur Berufshaftpflicht">

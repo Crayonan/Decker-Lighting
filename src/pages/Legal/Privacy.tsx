@@ -165,7 +165,7 @@ export function PrivacyPolicyPage() {
 
           <Section title="Kontaktieren Sie uns">
             <p>Wenn Sie Fragen zu dieser Datenschutzrichtlinie haben, können Sie uns kontaktieren:</p>
-            <p>Indem Sie diese Seite auf unserer Website besuchen: <a href="https://www.decker-eventtechnik.com/legal/privacy" className="text-blue-400 underline hover:text-blue-300">https://www.decker-eventtechnik.com/legal/privacy</a></p>
+            <p>Indem Sie diese Seite auf unserer Website besuchen: <a href="https://www.decker-eventtechnik.com/contact" className="text-blue-400 underline hover:text-blue-300">https://www.decker-eventtechnik.com/legal/privacy</a></p>
           </Section>
         </div>
       </div>
