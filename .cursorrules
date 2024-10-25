@@ -1,0 +1,96 @@
+You are an expert in Solidity, TypeScript, Node.js, React, Vite, Viem v2, Wagmi v2, Shadcn UI, Radix UI, Tailwind Aria, and Server-Side Rendering.
+Key Principles
+
+Write concise, technical responses with accurate TypeScript examples
+Use functional, declarative programming. Avoid classes
+Prefer iteration and modularization over duplication
+Use descriptive variable names with auxiliary verbs (e.g., isLoading)
+Use lowercase with dashes for directories (e.g., components/auth-wizard)
+Favor named exports for components
+Use the Receive an Object, Return an Object (RORO) pattern
+
+JavaScript/TypeScript
+
+Use "function" keyword for pure functions. Omit semicolons
+Use TypeScript for all code. Prefer interfaces over types. Avoid enums, use maps
+File structure: Exported component, subcomponents, helpers, static content, types
+Avoid unnecessary curly braces in conditional statements
+For single-line statements in conditionals, omit curly braces
+Use concise, one-line syntax for simple conditional statements (e.g., if (condition) doSomething())
+
+Error Handling and Validation
+
+Prioritize error handling and edge cases:
+
+Handle errors and edge cases at the beginning of functions
+Use early returns for error conditions to avoid deeply nested if statements
+Place the happy path last in the function for improved readability
+Avoid unnecessary else statements; use if-return pattern instead
+Use guard clauses to handle preconditions and invalid states early
+Implement proper error logging and user-friendly error messages
+Consider using custom error types or error factories for consistent error handling
+
+
+
+React/Vite/SSR
+
+Use functional components and TypeScript interfaces
+Use declarative JSX
+Use function, not const, for components
+Use Shadcn UI, Radix, and Tailwind Aria for components and styling
+Implement responsive design with Tailwind CSS
+Use mobile-first approach for responsive design
+Place static content and interfaces at file end
+Use content variables for static content outside render functions
+Use Zod for form validation
+Implement proper code splitting and lazy loading
+Optimize images: WebP format, size data, lazy loading
+Implement SSR best practices:
+
+Handle hydration properly
+Manage server/client state effectively
+Use proper data fetching strategies
+Implement proper error boundaries
+
+
+Integrate Contentful CMS:
+
+Use proper content modeling
+Implement efficient content fetching
+Handle preview modes appropriately
+Manage content types and references
+
+
+Use TanStack Query for data fetching:
+
+Implement proper caching strategies
+Handle loading and error states
+Use prefetching when appropriate
+Manage server state effectively
+
+
+
+Key Conventions
+
+Implement efficient SSR strategies
+Prioritize Web Vitals (LCP, CLS, FID)
+Follow Vite build optimization practices:
+
+Use proper code splitting
+Implement dynamic imports
+Optimize asset loading
+Use proper bundling strategies
+
+
+
+Service Layer
+
+Implement proper error handling in services
+Use proper typing for API responses
+Handle API errors gracefully
+Implement proper data transformation
+Use proper dependency injection
+Implement proper logging
+Handle authentication and authorization properly
+
+Refer to Vite documentation for build optimization and SSR implementation best practices. Use Contentful documentation for CMS integration patterns.
