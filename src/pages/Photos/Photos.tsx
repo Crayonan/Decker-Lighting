@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { client } from "../../contentfulClient";
 import "./photos.css";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useQuery } from "@tanstack/react-query";
 
 interface Photo {
   url: string;
@@ -11,16 +12,49 @@ interface Photo {
 }
 
 const Photos: React.FC = () => {
-  const [photos, setPhotos] = useState<Photo[]>([]);
-  const [tags, setTags] = useState<string[]>(["All"]);
   const [selectedTag, setSelectedTag] = useState<string>("All");
-  const [loading, setLoading] = useState(true);
-
   const container = useRef<HTMLDivElement>(null);
   const tagsRef = useRef<(HTMLButtonElement | null)[]>([]);
 
+  // Query for tags
+  const { data: tags = ["All"] } = useQuery({
+    queryKey: ['tags'],
+    queryFn: async () => {
+      const response = await client.getTags();
+      const fetchedTags = response.items.map(tag => tag.sys.id);
+      return ["All", ...fetchedTags];
+    },
+    staleTime: 1000 * 60 * 60, // Consider tags fresh for 1 hour
+    gcTime: 1000 * 60 * 60 * 24, // Keep in cache for 24 hours
+  });
+
+  // Query for photos
+  const { data: photos = [], isLoading } = useQuery({
+    queryKey: ['photos', selectedTag],
+    queryFn: async () => {
+      const query: Record<string, unknown> = {
+        order: '-sys.createdAt',
+        'metadata.tags[exists]': true
+      };
+
+      if (selectedTag && selectedTag !== "All") {
+        query['metadata.tags.sys.id[in]'] = selectedTag;
+      }
+
+      const response = await client.getAssets(query);
+      return response.items
+        .filter(asset => asset.metadata.tags.length > 0)
+        .map(asset => ({
+          url: asset.fields.file?.url || '',
+          tags: asset.metadata.tags.map(tag => tag.sys.id),
+        }));
+    },
+    staleTime: 1000 * 60 * 5, // Consider data fresh for 5 minutes
+    gcTime: 1000 * 60 * 30, // Keep in cache for 30 minutes
+  });
+
   useGSAP(() => {
-    if (!loading) {
+    if (!isLoading) {
       gsap.from(".photos-col img", { y: 300, stagger: 0.025, opacity: 0 });
 
       tagsRef.current.forEach((tag) => {
@@ -34,47 +68,10 @@ const Photos: React.FC = () => {
         }
       });
     }
-  }, { scope: container, dependencies: [loading] });
-
-  useEffect(() => {
-    client.getTags()
-      .then((response) => {
-        const fetchedTags = response.items.map(tag => tag.sys.id);
-        setTags(["All", ...fetchedTags]);
-      })
-      .catch(console.error);
-
-    fetchAssets();
-  }, []);
-
-  const fetchAssets = (tag: string | null = null) => {
-    setLoading(true);
-    const query: Record<string, unknown> = {
-      order: '-sys.createdAt',
-      'metadata.tags[exists]': true // This ensures we only fetch assets with tags
-    };
-
-    if (tag && tag !== "All") {
-      query['metadata.tags.sys.id[in]'] = tag;
-    }
-
-    client.getAssets(query)
-      .then((response) => {
-        const assetItems = response.items
-          .filter(asset => asset.metadata.tags.length > 0) // Extra check to ensure only tagged assets are included
-          .map(asset => ({
-            url: asset.fields.file?.url || '',
-            tags: asset.metadata.tags.map(tag => tag.sys.id),
-          }));
-        setPhotos(assetItems);
-        setLoading(false);
-      })
-      .catch(console.error);
-  };
+  }, { scope: container, dependencies: [isLoading] });
 
   const handleTagClick = (tag: string) => {
     setSelectedTag(tag);
-    fetchAssets(tag);
   };
 
   const handleTagHoverEnter = (index: number) => {
@@ -103,7 +100,7 @@ const Photos: React.FC = () => {
     else columnThree.push(photo);
   });
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="container p-4 mx-auto space-y-4">
         <nav className="flex justify-center mb-6 space-x-2">
@@ -145,17 +142,35 @@ const Photos: React.FC = () => {
       <div className="photos-grid">
         <div className="photos-col">
           {columnOne.map((photo, index) => (
-            <img key={index} src={photo.url} alt={`Photo ${index}`} />
+            <img 
+              key={index} 
+              src={photo.url} 
+              alt={`Photo ${index}`}
+              loading="lazy"
+              decoding="async"
+            />
           ))}
         </div>
         <div className="photos-col">
           {columnTwo.map((photo, index) => (
-            <img key={index} src={photo.url} alt={`Photo ${index}`} />
+            <img 
+              key={index} 
+              src={photo.url} 
+              alt={`Photo ${index}`}
+              loading="lazy"
+              decoding="async"
+            />
           ))}
         </div>
         <div className="photos-col">
           {columnThree.map((photo, index) => (
-            <img key={index} src={photo.url} alt={`Photo ${index}`} />
+            <img 
+              key={index} 
+              src={photo.url} 
+              alt={`Photo ${index}`}
+              loading="lazy"
+              decoding="async"
+            />
           ))}
         </div>
       </div>
