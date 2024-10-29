@@ -6,24 +6,33 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: #00000000; /* Ensure the background isn't transparent */
-  margin-bottom: 1rem;
+  background-color: #00000000;
+  margin-bottom: 0.3rem;
   padding-bottom: 0.5rem;
-  /* box-shadow: 0 2px 4px rgba(0,0,0,0.1); Optional: adds a subtle shadow for depth */
+  width: 100%;
+  overflow-x: auto;
 }
 
 .tags-bar {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
+  padding: 0 0.5rem;
+  min-width: min-content;
   overflow-x: auto;
   white-space: nowrap;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-.tags-bar::-webkit-scrollbar { 
-  display: none;  /* Safari and Chrome */
+@media (min-width: 768px) {
+  .tags-bar {
+    justify-content: center;
+  }
+}
+
+.tags-bar::-webkit-scrollbar {
+  display: none;
 }
 
 .tag-btn {
