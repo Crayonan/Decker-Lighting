@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { FaWhatsapp, FaInstagram } from "react-icons/fa";
-import { MdEmail } from "react-icons/md";
+import { FaWhatsapp, FaInstagram} from "react-icons/fa";
+import { MdEmail, MdPhone } from "react-icons/md";
 
 export default function ContactForm() {
   const [status, setStatus] = useState({
@@ -168,6 +168,13 @@ export default function ContactForm() {
               >
                 <MdEmail className="w-6 h-6" />
                 <span className="sr-only">Email</span>
+              </a>
+              <a
+                href="tel:+4917695449722"
+                className="text-[hsl(0_0%_40%)] hover:text-[hsl(0_0%_90%)] transition-colors duration-200"
+              >
+                <MdPhone className="w-6 h-6" />
+                <span className="sr-only">Phone</span>
               </a>
             </div>
           </div>
