@@ -1,8 +1,6 @@
 import React, { lazy, Suspense } from "react";
 import "./home.css";
 
-import { FaLightbulb } from "react-icons/fa";
-
 import LiveClockUpdate from "../../components/LiveClockUpdate/LiveClockUpdate";
 
 // Lazy load the Spline component
