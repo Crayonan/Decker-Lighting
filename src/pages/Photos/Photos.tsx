@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { client } from "../../contentfulClient";
 import "./photos.css";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -14,11 +14,56 @@ interface Photo {
   height?: number;
 }
 
+// Image Cache Service
+class ImageCacheService {
+  private cache: Map<string, Promise<void>>;
+  private maxSize: number;
+  private preloadThreshold: number; 
+
+  constructor(maxSize = 50, preloadThreshold = 3) {
+    this.cache = new Map();
+    this.maxSize = maxSize;
+    this.preloadThreshold = preloadThreshold;
+  }
+
+  preloadImage(url: string): Promise<void> {
+    if (this.cache.has(url)) {
+      return this.cache.get(url)!;
+    }
+
+    const promise = new Promise<void>((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve();
+      img.onerror = () => {
+        this.cache.delete(url);
+        reject();
+      };
+      img.src = url;
+    });
+
+    this.cache.set(url, promise);
+
+    if (this.cache.size > this.maxSize) {
+      const firstKey = this.cache.keys().next().value;
+      if (firstKey) {
+        this.cache.delete(firstKey);
+      }
+    }
+
+    return promise;
+  }
+
+  preloadBatch(urls: string[]): Promise<void[]> {
+    return Promise.all(urls.map(url => this.preloadImage(url)));
+  }
+}
+
 const Photos: React.FC = () => {
   const [selectedTag, setSelectedTag] = useState<string>("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
-  const [loading] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [imageCache] = useState(() => new ImageCacheService());
 
   const container = useRef<HTMLDivElement>(null);
   const tagsRef = useRef<(HTMLButtonElement | null)[]>([]);
@@ -37,7 +82,6 @@ const Photos: React.FC = () => {
       });
     }
   }, { scope: container, dependencies: [loading] });
-
 
   // Query for tags
   const { data: tags = ["All"] } = useQuery({
@@ -77,6 +121,28 @@ const Photos: React.FC = () => {
     staleTime: 1000 * 60 * 5,
   });
 
+  // Preload initial batch of images
+  useEffect(() => {
+    if (!isLoading && photos.length > 0) {
+      const initialBatch = photos.slice(0, 9).map(photo => photo.url);
+      imageCache.preloadBatch(initialBatch)
+        .then(() => setLoading(false))
+        .catch(() => setLoading(false));
+    }
+  }, [isLoading, photos]);
+
+  // Preload next images when current photo changes
+  useEffect(() => {
+    if (photos.length > 0) {
+      const nextImages = [];
+      for (let i = 1; i <= 3; i++) {
+        const nextIndex = (currentPhotoIndex + i) % photos.length;
+        nextImages.push(photos[nextIndex].url);
+      }
+      imageCache.preloadBatch(nextImages).catch(console.warn);
+    }
+  }, [currentPhotoIndex, photos]);
+
   const handleTagClick = (tag: string) => {
     setSelectedTag(tag);
   };
@@ -96,6 +162,14 @@ const Photos: React.FC = () => {
   const handleImageClick = (index: number) => {
     setCurrentPhotoIndex(index);
     setIsModalOpen(true);
+
+    // Preload next few images
+    const nextImages = [];
+    for (let i = 1; i <= 3; i++) {
+      const nextIndex = (index + i) % photos.length;
+      nextImages.push(photos[nextIndex].url);
+    }
+    imageCache.preloadBatch(nextImages).catch(console.warn);
   };
 
   const handleNextPhoto = () => {
@@ -139,7 +213,7 @@ const Photos: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto px-4">
+    <div className="container mx-auto px-4" ref={container}>
       {/* Scrollable tags bar */}
       <div className="tags-bar-wrapper">
         <div className="tags-bar">
