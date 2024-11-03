@@ -80,7 +80,7 @@ export default function ContactForm() {
     <div className="min-h-screen bg-[hsl(0_0%_7.5%)] text-[hsl(0_0%_90%)] py-16 sm:py-16 flex flex-col">
       <div className="mx-auto w-full max-w-[90%] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[800px] flex flex-col">
         <h2 className="mb-4 text-3xl font-bold text-center sm:text-3xl sm:mb-6">
-          Contact Us
+          Kontaktieren Sie Uns
         </h2>
         <div className="w-full bg-[hsl(0_0%_10%)] rounded-xl shadow-lg border border-[hsl(0_0%_15%)] p-4 sm:p-6 flex-grow flex flex-col">
           <form onSubmit={handleSubmit} className="flex-grow space-y-4">
@@ -113,7 +113,7 @@ export default function ContactForm() {
             </div>
             <div>
               <Label htmlFor="message" className="text-sm">
-                Message
+                Nachricht
               </Label>
               <Textarea
                 id="message"
@@ -131,8 +131,8 @@ export default function ContactForm() {
             >
               {!status.submitting
                 ? !status.submitted
-                  ? "Send Message"
-                  : "Message Sent"
+                  ? "Abschicken"
+                  : "Nachricht gesendet"
                 : "Sending..."}
             </Button>
           </form>

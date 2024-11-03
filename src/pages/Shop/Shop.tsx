@@ -88,7 +88,7 @@ export default function Shop() {
       <div className="max-w-4xl px-4 pb-24 mx-auto sm:pb-4">
         <div className="mb-12 text-center">
           <h1 className="py-8 mx-auto text-3xl font-bold text-center sm:px-4">
-            Our packages
+            Unsere Pakete
           </h1>
           <p className="max-w-2xl mx-auto text-dark-text-secondary">
             {shopText}
@@ -151,7 +151,7 @@ export default function Shop() {
                     className="mt-4 sm:mt-6 w-full bg-[#25D366] text-white py-2 sm:py-3 rounded-lg font-semibold text-sm sm:text-base hover:bg-[#128C7E] transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#128C7E] focus:ring-opacity-50 flex items-center justify-center"
                   >
                     <FaWhatsapp className="mr-2" />
-                    Inquire on WhatsApp
+                    Erkundigen Sie sich auf WhatsApp
                   </button>
                 </div>
               </div>

@@ -87,7 +87,7 @@ export function TeamsPage() {
       <div className="mx-auto max-w-[1400px]">
         <div className="mb-12 text-center">
           <h2 className="py-8 mx-auto text-3xl font-bold text-center sm:px-4">
-            Meet Our Exceptional Team
+            Triff das Team hinter den Kulissen
           </h2>
           <p className="max-w-2xl mx-auto text-dark-text-secondary">
             {teamText}
@@ -95,7 +95,7 @@ export function TeamsPage() {
         </div>
 
         <h2 className="mb-8 text-2xl font-bold text-center">
-          Our Light Engineering Team
+          Wir stellen uns vor
         </h2>
 
         <div
@@ -133,7 +133,7 @@ export function TeamsPage() {
                 </p>
                 <div className="mb-4">
                   <h4 className="mb-2 font-semibold text-dark-text">
-                    Specialties:
+                    Referenzen:
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {employee.specialties.map((specialty) => (
@@ -149,7 +149,7 @@ export function TeamsPage() {
                 </div>
                 <div>
                   <h4 className="mb-2 font-semibold text-dark-text">
-                    Contact:
+                    Kontakt:
                   </h4>
                   <p className="text-sm text-dark-text-tertiary">
                     {employee.email}
