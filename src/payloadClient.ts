@@ -20,6 +20,46 @@ export interface PaginatedDocs<T = any> {
     nextPage: number | null;
 }
 
+export interface FormField {
+  name: string;
+  label?: string | null;
+  width?: number | null;
+  defaultValue?: string | null;
+  required?: boolean | null;
+  blockType: 'text' | 'textarea' | 'email' | 'select' | 'checkbox' | 'message' | 'number' | 'country' | 'state' | 'payment'; 
+  options?: { label: string; value: string }[];
+  message?: any | null; 
+}
+
+export interface PayloadForm {
+  id: string; 
+  title: string;
+  slug: string; 
+  fields: FormField[];
+  submitButtonLabel?: string | null;
+  confirmationType?: 'message' | 'redirect' | null;
+  confirmationMessage?: any | null; 
+  redirect?: {
+    type?: 'reference' | 'custom' | null;
+    url?: string | null;
+    reference?: {
+      relationTo?: string | null;
+      value?: string | number | null; 
+    } | null;
+  } | null;
+  emails?:
+    | {
+        emailTo?: string | null
+        emailFrom?: string | null
+        subject: string
+        message?: any | null 
+        id?: string | null
+      }[]
+    | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 const API_URL = import.meta.env.BACKEND_API_URL;
 
 if (!API_URL) {
@@ -109,5 +149,48 @@ export const fetchSiteTexts = async (): Promise<PayloadGeneratedSiteTexts | null
     return null;
   }
 };
+
+// --- Fetch Form by Title ---
+export const fetchFormBySlug = async (title: string): Promise<PayloadForm | null> => {
+  try {
+    const response = await payloadClient.get<PaginatedDocs<PayloadForm>>('/forms', { 
+      params: {
+        where: {
+          title: { equals: title },
+        },
+        limit: 1,
+        depth: 1, 
+      },
+    });
+    if (response.data.docs && response.data.docs.length > 0) {
+      return response.data.docs[0];
+    }
+    console.warn(`Form with slug "${title}" not found.`);
+    return null;
+  } catch (error) {
+    console.error(`Error fetching form with slug ${title} from Payload:`, error);
+    throw error; 
+  }
+};
+
+// --- Submit Form Data ---
+export const submitForm = async (formId: string, formData: Record<string, any>): Promise<any> => {
+  try {
+      const payloadData = {
+          form: formId,
+          submissionData: Object.entries(formData).map(([key, value]) => ({
+              field: key,
+              value: value,
+          })),
+      };
+      const response = await payloadClient.post('/form-submissions', payloadData);
+      return response.data; 
+  } catch (error) {
+      console.error("Error submitting form to Payload:", error);
+      const errorMessage = (error as any).response?.data?.errors?.[0]?.message || (error as Error).message || 'Submission failed';
+      throw new Error(errorMessage);
+  }
+};
+
 
 export default payloadClient;
