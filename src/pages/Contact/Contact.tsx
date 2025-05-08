@@ -150,7 +150,7 @@ export default function ContactForm() {
                 rel="noopener noreferrer"
                 className="text-[hsl(0_0%_40%)] hover:text-[hsl(0_0%_90%)] transition-colors duration-200"
               >
-                <FaInstagram className="w-6 h-6" />
+                <FaInstagram style={{ color: "white" }} className="w-6 h-6" />
                 <span className="sr-only">Instagram</span>
               </a>
               <a
@@ -159,21 +159,21 @@ export default function ContactForm() {
                 rel="noopener noreferrer"
                 className="text-[hsl(0_0%_40%)] hover:text-[hsl(0_0%_90%)] transition-colors duration-200"
               >
-                <FaWhatsapp className="w-6 h-6" />
+                <FaWhatsapp style={{ color: "white" }} className="w-6 h-6" />
                 <span className="sr-only">WhatsApp</span>
               </a>
               <a
                 href="mailto:info@decker-eventtechnik.com"
                 className="text-[hsl(0_0%_40%)] hover:text-[hsl(0_0%_90%)] transition-colors duration-200"
               >
-                <MdEmail className="w-6 h-6" />
+                <MdEmail style={{ color: "white" }} className="w-6 h-6" />
                 <span className="sr-only">Email</span>
               </a>
               <a
                 href="tel:+4917695449722"
                 className="text-[hsl(0_0%_40%)] hover:text-[hsl(0_0%_90%)] transition-colors duration-200"
               >
-                <MdPhone className="w-6 h-6" />
+                <MdPhone style={{ color: "white" }} className="w-6 h-6" />
                 <span className="sr-only">Phone</span>
               </a>
             </div>

@@ -3,7 +3,6 @@ import "./home.css";
 
 import LiveClockUpdate from "../../components/LiveClockUpdate/LiveClockUpdate";
 
-// Lazy load the Spline component
 const LazySpline = lazy(() => import("@splinetool/react-spline"));
 
 const Home: React.FC = () => {
