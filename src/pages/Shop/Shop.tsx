@@ -1,22 +1,18 @@
-// src/pages/Shop/Shop.tsx
 import { useState, useEffect } from "react";
 import { FaChevronDown, FaWhatsapp } from "react-icons/fa";
 import { PiPackageDuotone } from "react-icons/pi";
 import { Check } from "lucide-react";
-// Remove Contentful client, import Payload client functions
-// import { client as contentfulClient } from "../../contentfulClient";
 import { fetchShopPackages, fetchSiteTexts } from "../../payloadClient";
 import type {
   ShopPackage as PayloadGeneratedShopPackage,
-  SiteText as PayloadGeneratedSiteText,
-} from "@/types/payload-types"; // Assuming payload-types.ts is in src/types/
-import { Skeleton } from "@/components/ui/skeleton"; // For loading state
+} from "@/types/payload-types"; 
+import { Skeleton } from "@/components/ui/skeleton"; 
 
-// Interface for display purposes in this component
+
 interface DisplayShopPackage {
   id: number;
   name: string;
-  description: string; // Assuming description is plain text. If RichText, type 'any' and use RichText renderer
+  description: string; 
   price: string;
   features: string[];
   whatsappLink: string;
@@ -24,7 +20,7 @@ interface DisplayShopPackage {
 
 export default function Shop() {
   const [packages, setPackages] = useState<DisplayShopPackage[]>([]);
-  const [shopText, setShopText] = useState<string | any>(""); // Can be string or RichText JSON
+  const [shopText, setShopText] = useState<string | unknown>(""); 
   const [openAccordion, setOpenAccordion] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -34,25 +30,19 @@ export default function Shop() {
       setLoading(true);
       setError(null);
       try {
-        // Fetch packages from Payload
         const packagesResponse = await fetchShopPackages();
         const fetchedPackages = packagesResponse.docs.map((item: PayloadGeneratedShopPackage) => ({
           id: item.id,
           name: item.name,
-          description: item.description || "", // Handle if description is optional
+          description: item.description || "", 
           price: item.price,
-          // The 'features' field in Payload is an array of objects like { feature: string, id?: string }
-          // We need to map it to an array of strings for the DisplayShopPackage interface
           features: item.features?.map(f => f.feature) || [],
           whatsappLink: item.whatsappLink || "",
         }));
         setPackages(fetchedPackages);
 
-        // Fetch site texts (including shopText) from Payload
         const siteTextsResponse = await fetchSiteTexts();
         if (siteTextsResponse && siteTextsResponse.shopIntroText) {
-          // Assuming shopIntroText is plain text or you'll render RichText
-          // If shopIntroText is RichText from Payload, it will be JSON
           setShopText(siteTextsResponse.shopIntroText);
         }
 
@@ -72,11 +62,10 @@ export default function Shop() {
   };
 
   const handleWhatsAppClick = (whatsappLink: string) => {
-    if (whatsappLink) { // Ensure link is not empty
+    if (whatsappLink) { 
       window.open(whatsappLink, "_blank");
     } else {
       console.warn("WhatsApp link is missing for this package.");
-      // Optionally, provide user feedback here
     }
   };
 
@@ -86,8 +75,8 @@ export default function Shop() {
       <div className="min-h-screen py-8 pb-32 bg-dark-bg text-dark-text">
         <div className="max-w-4xl px-4 pb-24 mx-auto sm:pb-4">
           <div className="mb-12 text-center">
-            <Skeleton className="w-1/2 h-8 mx-auto mb-4" /> {/* Title */}
-            <Skeleton className="w-3/4 h-16 mx-auto" />   {/* shopText */}
+            <Skeleton className="w-1/2 h-8 mx-auto mb-4" /> 
+            <Skeleton className="w-3/4 h-16 mx-auto" />  
           </div>
           <div className="space-y-4">
             {[1, 2].map(i => (
@@ -125,11 +114,6 @@ export default function Shop() {
     );
   }
 
-  // If shopText or package descriptions are RichText from Payload, import and use the RichText renderer
-  // import { RichText } from '@payloadcms/richtext-lexical/react';
-  // <RichText data={shopText} />
-  // <RichText data={pkg.description} />
-
   return (
     <div className="min-h-screen py-8 pb-32 bg-dark-bg text-dark-text">
       <div className="max-w-4xl px-4 pb-24 mx-auto sm:pb-4">
@@ -137,15 +121,13 @@ export default function Shop() {
           <h1 className="py-8 mx-auto text-3xl font-bold text-center sm:px-4">
             Unsere Pakete
           </h1>
-           {/* Render shopText: Check if it's RichText (object) or plain string */}
           {typeof shopText === 'object' && shopText !== null && Object.keys(shopText).length > 0 ? (
             <div className="max-w-2xl mx-auto text-dark-text-secondary rich-text-content">
-              {/* <RichText data={shopText} /> Ensure RichText is imported if using */}
-              <p>Rich text content for shopText needs a renderer.</p> {/* Placeholder */}
+              <p>Rich text content for shopText needs a renderer.</p>
             </div>
           ) : (
             <p className="max-w-2xl mx-auto text-dark-text-secondary">
-              {shopText || "Loading introduction..."}
+              {typeof shopText === 'string' ? shopText : "Loading introduction..."}
             </p>
           )}
         </div>
@@ -155,7 +137,7 @@ export default function Shop() {
           )}
           {packages.map((pkg, index) => (
             <div
-              key={pkg.id} // Use numeric ID from Payload
+              key={pkg.id}
               className="bg-[hsl(0,0%,10%)] border border-[hsl(0,0%,15%)] shadow-md rounded-xl overflow-hidden"
             >
               <button
@@ -170,11 +152,9 @@ export default function Shop() {
                     <h2 className="text-lg font-semibold sm:text-xl md:text-2xl">
                       {pkg.name}
                     </h2>
-                    {/* Render pkg.description: Check if it's RichText or plain string */}
                     {typeof pkg.description === 'object' && pkg.description !== null && Object.keys(pkg.description).length > 0 ? (
                        <div className="text-sm sm:text-base text-[hsl(0,0%,60%)] rich-text-content">
-                         {/* <RichText data={pkg.description} /> Ensure RichText is imported if using */}
-                         <p>Rich text content for description needs a renderer.</p> {/* Placeholder */}
+                         <p>Rich text content for description needs a renderer.</p> 
                        </div>
                     ) : (
                       <p className="text-sm sm:text-base text-[hsl(0,0%,60%)]">
@@ -215,7 +195,7 @@ export default function Shop() {
                   <button
                     onClick={() => handleWhatsAppClick(pkg.whatsappLink)}
                     className="mt-4 sm:mt-6 w-full bg-[#25D366] text-white py-2 sm:py-3 rounded-lg font-semibold text-sm sm:text-base hover:bg-[#128C7E] transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#128C7E] focus:ring-opacity-50 flex items-center justify-center"
-                    disabled={!pkg.whatsappLink} // Disable if no link
+                    disabled={!pkg.whatsappLink} 
                   >
                     <FaWhatsapp className="mr-2" />
                     Erkundigen Sie sich auf WhatsApp

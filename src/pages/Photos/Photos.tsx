@@ -1,4 +1,3 @@
-// src/pages/Photos/Photos.tsx
 import React, { useState, useRef, useMemo } from "react";
 import { fetchPhotos, fetchPhotoTags } from "../../payloadClient";
 import "./photos.css";
@@ -10,7 +9,7 @@ import { useGSAP } from "@gsap/react";
 
 import type { Photo as PayloadGeneratedPhoto, Tag as PayloadGeneratedTag, Media, MediaSizes } from "@/types/payload-types";
 
-const PAYLOAD_PUBLIC_URL = import.meta.env.VITE_PAYLOAD_PUBLIC_URL;
+const PAYLOAD_PUBLIC_URL = import.meta.env.BACKEND_URL;
 
 interface DisplayPhoto {
   id: number;
@@ -18,8 +17,8 @@ interface DisplayPhoto {
   modalUrl: string;
   rawUrl?: string | null;
   tags: PayloadGeneratedTag[];
-  width?: number | null;    // Original width
-  height?: number | null;   // Original height
+  width?: number | null;
+  height?: number | null;
   description?: string;  
 }
 
@@ -55,14 +54,8 @@ const Photos: React.FC = () => {
   });
 
   const photos: DisplayPhoto[] = useMemo(() => {
-    // console.log('[Photos.tsx useMemo] Running map. PAYLOAD_PUBLIC_URL:', PAYLOAD_PUBLIC_URL);
-    // console.log('[Photos.tsx useMemo] paginatedPhotos?.docs:', paginatedPhotos?.docs);
-
-    return paginatedPhotos?.docs.map((p: PayloadGeneratedPhoto, index: number) => {
-      // console.log(`[Photos.tsx useMemo] Mapping item ${index}, ID: ${p.id}`);
-
+    return paginatedPhotos?.docs.map((p: PayloadGeneratedPhoto) => {
       const imageField = p.image as Media;
-      // console.log(`[Photos.tsx useMemo] Item ${index} - p.image value:`, imageField);
 
       let mediaObject: Media | null = null;
       let originalRelativeUrl: string | undefined | null = undefined;
@@ -75,46 +68,35 @@ const Photos: React.FC = () => {
       if (typeof imageField === 'object' && imageField !== null && 'url' in imageField) {
           mediaObject = imageField as Media;
           originalRelativeUrl = mediaObject?.url;
-          // console.log(`[Photos.tsx useMemo] Item ${index} - p.image is OBJECT. originalRelativeUrl:`, originalRelativeUrl);
 
-          // Determine grid URL from sizes, fallback to original
-          const preferredGridSizeName: keyof MediaSizes = 'tablet'; // Or 'card', or another defined size
+          const preferredGridSizeName: keyof MediaSizes = 'tablet'; 
           const gridSizeObject = mediaObject?.sizes?.[preferredGridSizeName];
-          gridRelativeUrl = gridSizeObject?.url || originalRelativeUrl; // Fallback to original if size or its URL is missing
+          gridRelativeUrl = gridSizeObject?.url || originalRelativeUrl; 
 
       } else if (typeof imageField === 'number') {
-          //  console.warn(`[Photos.tsx useMemo] Item ${index} - p.image is only an ID (${imageField}), not populated.`);
            originalRelativeUrl = undefined;
            gridRelativeUrl = undefined;
       } else {
-          // console.log(`[Photos.tsx useMemo] Item ${index} - p.image is null or undefined.`);
            originalRelativeUrl = undefined;
            gridRelativeUrl = undefined;
       }
 
-      // Construct Modal URL
+
       if (originalRelativeUrl && PAYLOAD_PUBLIC_URL) {
         const publicUrlBase = PAYLOAD_PUBLIC_URL.endsWith('/') ? PAYLOAD_PUBLIC_URL.slice(0, -1) : PAYLOAD_PUBLIC_URL;
         const imagePath = originalRelativeUrl.startsWith('/') ? originalRelativeUrl : `/${originalRelativeUrl}`;
         modalDisplayUrl = `${publicUrlBase}${imagePath}`;
-        // console.log(`[Photos.tsx useMemo] Item ${index} - Constructed modalDisplayUrl:`, modalDisplayUrl);
-      } else {
-        //  if (!originalRelativeUrl) console.log(`[Photos.tsx useMemo] Item ${index} - Failed to construct modalDisplayUrl because originalRelativeUrl is falsy.`);
-        //  if (!PAYLOAD_PUBLIC_URL) console.log(`[Photos.tsx useMemo] Item ${index} - Failed to construct modalDisplayUrl because PAYLOAD_PUBLIC_URL is falsy.`);
+      } else if (originalRelativeUrl) {
+        modalDisplayUrl = originalRelativeUrl;
       }
       
-      // Construct Grid URL
       if (gridRelativeUrl && PAYLOAD_PUBLIC_URL) {
         const publicUrlBase = PAYLOAD_PUBLIC_URL.endsWith('/') ? PAYLOAD_PUBLIC_URL.slice(0, -1) : PAYLOAD_PUBLIC_URL;
         const imagePath = gridRelativeUrl.startsWith('/') ? gridRelativeUrl : `/${gridRelativeUrl}`;
         gridDisplayUrl = `${publicUrlBase}${imagePath}`;
-        // console.log(`[Photos.tsx useMemo] Item ${index} - Constructed gridDisplayUrl:`, gridDisplayUrl);
       } else {
-        //  if (!gridRelativeUrl) console.log(`[Photos.tsx useMemo] Item ${index} - Failed to construct gridDisplayUrl because gridRelativeUrl is falsy.`);
-        //  if (!PAYLOAD_PUBLIC_URL) console.log(`[Photos.tsx useMemo] Item ${index} - Failed to construct gridDisplayUrl because PAYLOAD_PUBLIC_URL is falsy.`);
-          if(modalDisplayUrl) gridDisplayUrl = modalDisplayUrl; // Fallback grid to modal if grid construction failed but modal didn't
+          if(modalDisplayUrl) gridDisplayUrl = modalDisplayUrl;
       }
-
 
       const populatedTags = (p.tags?.filter(tag => typeof tag === 'object' && tag !== null) as PayloadGeneratedTag[]) || [];
 
@@ -124,8 +106,8 @@ const Photos: React.FC = () => {
         modalUrl: modalDisplayUrl,
         rawUrl: originalRelativeUrl,
         tags: populatedTags,
-        width: mediaObject?.width, // Original width for aspect ratio
-        height: mediaObject?.height, // Original height for aspect ratio
+        width: mediaObject?.width,
+        height: mediaObject?.height,
         description: p.description || '',
       };
     }) || [];
@@ -253,7 +235,7 @@ const Photos: React.FC = () => {
               else if (columnIndex === 1) actualIndex = columnOne.length + photoIndex;
               else actualIndex = columnOne.length + columnTwo.length + photoIndex;
               
-              if (!photo.gridUrl) { // Check gridUrl for rendering in the grid
+              if (!photo.gridUrl) { 
                 console.warn("Photo missing grid URL:", photo);
                 return <Skeleton key={`${photo.id}-skeleton-${photoIndex}`} className="aspect-[3/4] w-full rounded-lg" />;
               }
@@ -262,13 +244,11 @@ const Photos: React.FC = () => {
                 <div 
                   key={photo.id || `photo-${columnIndex}-${photoIndex}`}
                   className="relative overflow-hidden rounded-lg cursor-pointer"
-                  // Use original width/height for container's aspect ratio.
-                  // The img tag uses object-cover to fill this container with the gridUrl image.
                   style={{ aspectRatio: photo.width && photo.height ? `${photo.width}/${photo.height}` : '3/4' }}
                   onClick={() => handleImageClick(actualIndex)}
                 >
                   <img 
-                    src={photo.gridUrl} // Use gridUrl for the image shown in the grid
+                    src={photo.gridUrl}
                     alt={photo.description || `Gallery image ${actualIndex + 1}`}
                     className="absolute inset-0 object-cover w-full h-full transition-transform duration-300 hover:scale-105"
                     loading={actualIndex < 9 ? "eager" : "lazy"}

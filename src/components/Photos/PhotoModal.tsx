@@ -1,26 +1,21 @@
-// src/components/Photos/PhotoModal.tsx
 import React, { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
-import type { Tag as PayloadGeneratedTag } from "@/types/payload-types"; // Ensure this path is correct
+import type { Tag as PayloadGeneratedTag } from "@/types/payload-types";
 
-// This interface should match the structure of DisplayPhoto from Photos.tsx
-// or be a compatible subset that PhotoModal actually uses.
 interface ModalPhoto {
   id?: number;
-  // gridUrl: string; // Not strictly needed by the modal itself, but part of DisplayPhoto
-  modalUrl: string; // This is the URL the modal will display
-  // rawUrl?: string | null; // Also not strictly needed by modal, but part of DisplayPhoto
-  tags: PayloadGeneratedTag[]; // May or may not be used by modal, but good for consistency
-  width?: number | null;    // Original width, could be used for context if needed
-  height?: number | null;   // Original height
+  modalUrl: string; 
+  tags: PayloadGeneratedTag[]; 
+  width?: number | null;
+  height?: number | null;
   description?: string;
 }
 
 interface PhotoModalProps {
   isOpen: boolean;
   onClose: () => void;
-  currentPhoto: ModalPhoto | null; // Will receive a DisplayPhoto object
-  photos: ModalPhoto[];          // Will receive an array of DisplayPhoto objects
+  currentPhoto: ModalPhoto | null;
+  photos: ModalPhoto[];
   onNext: () => void;
   onPrevious: () => void;
 }
@@ -41,7 +36,7 @@ const PhotoModal: React.FC<PhotoModalProps> = ({
 
   useEffect(() => {
     if (currentPhoto) {
-      setIsLoading(true); // Reset loading when a new photo is selected
+      setIsLoading(true);
     }
   }, [currentPhoto]);
 
@@ -97,7 +92,6 @@ const PhotoModal: React.FC<PhotoModalProps> = ({
 
   if (!isOpen) return null;
 
-  // Find current index based on a unique property, modalUrl or id
   const currentIndex = currentPhoto && photos.length > 0
     ? photos.findIndex((photo) => photo.id === currentPhoto.id || photo.modalUrl === currentPhoto.modalUrl)
     : -1;
@@ -164,7 +158,7 @@ const PhotoModal: React.FC<PhotoModalProps> = ({
         )}
         {currentPhoto && currentPhoto.modalUrl && (
           <img
-            src={currentPhoto.modalUrl} // Use the modalUrl prop
+            src={currentPhoto.modalUrl}
             alt={currentPhoto.description || "Gallery image"}
             className={`max-h-[90vh] max-w-[90vw] object-contain transition-opacity duration-300 ${
               isLoading ? "opacity-0" : "opacity-100"

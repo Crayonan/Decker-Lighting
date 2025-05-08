@@ -1,5 +1,4 @@
-// src/pages/Teams/Teams.tsx
-import React, { useState, useEffect, useMemo } from "react"; // Added useMemo
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -12,28 +11,26 @@ import { Badge } from "@/components/ui/badge";
 import { fetchTeamMembers, fetchSiteTexts } from "../../payloadClient";
 import type {
   TeamMember as PayloadGeneratedTeamMember,
-  SiteText as PayloadGeneratedSiteText,
   Media as PayloadGeneratedMedia
 } from "@/types/payload-types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { RichText } from "@payloadcms/richtext-lexical/react";
 
-// Get the base URL for Payload server (where media files are served from)
-const PAYLOAD_PUBLIC_URL = import.meta.env.VITE_PAYLOAD_PUBLIC_URL;
+const PAYLOAD_PUBLIC_URL = import.meta.env.BACKEND_URL;
 
 interface DisplayTeamMember {
   id: number;
   name: string;
   role: string;
-  bio: any; // Payload's Lexical JSON structure
-  image: string; // This will be the absolute URL
+  bio: any; 
+  image: string; 
   specialties: string[];
   email: string;
 }
 
 export function TeamsPage() {
   const [employees, setEmployees] = useState<DisplayTeamMember[]>([]);
-  const [teamText, setTeamText] = useState<string>(""); // Can be string or RichText JSON
+  const [teamText, setTeamText] = useState<string>(""); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -57,17 +54,15 @@ export function TeamsPage() {
             const imagePath = relativeUrl.startsWith('/') ? relativeUrl : `/${relativeUrl}`;
             absoluteImageUrl = `${publicUrlBase}${imagePath}`;
           } else if (relativeUrl) {
-             absoluteImageUrl = relativeUrl; // Fallback if PUBLIC_URL is not set
-             console.warn("VITE_PAYLOAD_PUBLIC_URL is not set, using relative URL for image:", relativeUrl);
+             absoluteImageUrl = relativeUrl; 
           }
-          // console.log(`Mapping Team Member ${item.name}, Profile Pic Field:`, profilePic, 'Absolute URL:', absoluteImageUrl);
 
           return {
             id: item.id,
             name: item.name,
             role: item.role,
             bio: item.bio,
-            image: absoluteImageUrl, // Assign the constructed absolute URL
+            image: absoluteImageUrl, 
             specialties: item.specialties || [],
             email: item.email,
           };
@@ -79,7 +74,7 @@ export function TeamsPage() {
         }
 
       } catch (err) {
-        console.error("Error fetching data for Teams page:", err);
+        console.error("Error fetching data:", err);
         setError("Failed to fetch data. Please try again later.");
       } finally {
         setLoading(false);
@@ -89,8 +84,8 @@ export function TeamsPage() {
     fetchData();
   }, []);
 
+  // -- Skeleton Loading State --
   if (loading) {
-    // Skeleton loader (same as before)
     return (
       <div className="min-h-screen py-8 pb-32 bg-dark-bg text-dark-text">
         <div className="mx-auto max-w-[1400px]">
@@ -173,7 +168,6 @@ export function TeamsPage() {
             >
               <CardHeader>
                 <Avatar className="w-24 h-24 mx-auto mb-4">
-                  {/* Use the absolute URL stored in employee.image */}
                   <AvatarImage src={employee.image} alt={employee.name} />
                   <AvatarFallback>
                     {employee.name
@@ -202,7 +196,6 @@ export function TeamsPage() {
                     Referenzen:
                   </h4>
                   <div className="flex flex-wrap gap-2">
-                    {/* Ensure employee.specialties is an array */}
                     {(employee.specialties || []).map((specialty) => (
                       <Badge
                         key={specialty}

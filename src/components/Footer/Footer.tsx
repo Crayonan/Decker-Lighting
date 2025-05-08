@@ -8,9 +8,6 @@ const Footer = () => {
         <Link to="/legal/impressum" className="text-sm transition-colors hover:text-dark-text">
           Impressum
         </Link>
-        {/* <Link to="/cookies" className="text-sm transition-colors hover:text-dark-text">
-          Cookies
-        </Link> */}
         <Link to="/legal/privacy" className="text-sm transition-colors hover:text-dark-text">
           Privacy
         </Link>
@@ -21,9 +18,6 @@ const Footer = () => {
         <Link to="/legal/impressum" className="text-sm transition-colors unselectable hover:text-dark-text">
           Impressum
         </Link>
-        {/* <Link to="/cookies" className="text-sm transition-colors hover:text-dark-text">
-          Cookies
-        </Link> */}
         <Link to="/legal/privacy" className="text-sm transition-colors unselectable hover:text-dark-text">
           
           Privacy

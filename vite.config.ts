@@ -14,14 +14,14 @@ if (result.error) {
 }
 
 console.log('[Vite Config] VITE_TEST_VAR from process.env:', process.env.VITE_TEST_VAR);
-console.log('[Vite Config] VITE_PAYLOAD_API_URL from process.env:', process.env.VITE_PAYLOAD_API_URL);
+console.log('[Vite Config] BACKEND_API_URL from process.env:', process.env.BACKEND_API_URL);
 
 
 export default defineConfig({
   plugins: [react()],
   define: {
-    'import.meta.env.VITE_PAYLOAD_PUBLIC_URL': JSON.stringify(process.env.VITE_PAYLOAD_PUBLIC_URL),
-    'import.meta.env.VITE_PAYLOAD_API_URL': JSON.stringify(process.env.VITE_PAYLOAD_API_URL),
+    'import.meta.env.BACKEND_URL': JSON.stringify(process.env.BACKEND_URL),
+    'import.meta.env.BACKEND_API_URL': JSON.stringify(process.env.BACKEND_API_URL),
   },
   resolve: {
     alias: {
